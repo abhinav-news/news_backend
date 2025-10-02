@@ -15,3 +15,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
+
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField()

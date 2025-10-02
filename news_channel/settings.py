@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'newsApp'
+    'newsApp',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -186,3 +187,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AWS_ACCESS_KEY_ID = config('DO_SPACES_KEY')
+AWS_SECRET_ACCESS_KEY = config('DO_SPACES_SECRET')
+AWS_STORAGE_BUCKET_NAME = config('DO_SPACES_BUCKET')         # e.g. 'my-space'
+AWS_S3_ENDPOINT_URL = config('DO_SPACES_ENDPOINT')           # e.g. 'https://blr1.digitaloceanspaces.com'
+AWS_S3_REGION_NAME = config('DO_SPACES_REGION', default='blr1')
+
+# Default file storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Optional: make uploaded files public
+AWS_DEFAULT_ACL = 'public-read'
