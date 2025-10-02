@@ -121,7 +121,7 @@ DATABASES = {
         'USER': config('USER'),
         'PASSWORD': config('PASSWORD'),
         'HOST': config('HOST'),
-        'PORT': config('PORT', default='25060'),            # Usually 25060 for DO's managed MySQL
+        'PORT': '25060',            # Usually 25060 for DO's managed MySQL
         'OPTIONS': {
             'ssl': {
                 'ca': str(BASE_DIR / 'ca-certificate.crt'),  # Download from DO
