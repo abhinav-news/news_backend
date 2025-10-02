@@ -89,6 +89,27 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 WSGI_APPLICATION = 'news_channel.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',  # shows SQL and connection activity
+            'handlers': ['console'],
+        },
+        'django.request': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        },
+    },
+}
+
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -108,6 +129,20 @@ DATABASES = {
         },
     }
 }
+
+import logging
+
+# Log database connection config (do not log password)
+db_logger = logging.getLogger('django.db.backends')
+db_logger.setLevel(logging.DEBUG)
+
+print("\n[DATABASE DEBUG]")
+print("ENGINE:", DATABASES['default']['ENGINE'])
+print("NAME:", DATABASES['default']['NAME'])
+print("USER:", DATABASES['default']['USER'])
+print("HOST:", DATABASES['default']['HOST'])
+print("PORT:", DATABASES['default']['PORT'])
+print("SSL CA:", DATABASES['default']['OPTIONS']['ssl']['ca'])
 
 
 
