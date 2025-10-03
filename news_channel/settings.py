@@ -69,6 +69,17 @@ REST_FRAMEWORK = {
     ),
 }
 
+from datetime import timedelta
+
+
+SIMPLE_JWT = {
+    # Access token valid for 1 day
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+
+    # Refresh token valid for 7 days (you can adjust as needed)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
 ROOT_URLCONF = 'news_channel.urls'
 
 TEMPLATES = [
@@ -136,14 +147,6 @@ import logging
 # Log database connection config (do not log password)
 db_logger = logging.getLogger('django.db.backends')
 db_logger.setLevel(logging.DEBUG)
-
-print("\n[DATABASE DEBUG]")
-print("ENGINE:", DATABASES['default']['ENGINE'])
-print("NAME:", DATABASES['default']['NAME'])
-print("USER:", DATABASES['default']['USER'])
-print("HOST:", DATABASES['default']['HOST'])
-print("PORT:", DATABASES['default']['PORT'])
-print("SSL CA:", DATABASES['default']['OPTIONS']['ssl']['ca'])
 
 
 
