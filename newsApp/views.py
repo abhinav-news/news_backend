@@ -93,7 +93,7 @@ class FileUploadView(APIView):
                         Key=unique_filename
                     )
                     print("File successfully verified in DigitalOcean Spaces")
-                except ClientError as e:
+                except Exception as e:
                     print(f"File verification failed: {e}")
                     return Response(
                         {"error": "File upload verification failed"},
