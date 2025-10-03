@@ -139,7 +139,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': config('NAME'),
-        'USER': "doadmin",
+        'USER': config('USER'),
         'PASSWORD': config('PASSWORD'),
         'HOST': config('HOST'),
         'PORT': '25060',            # Usually 25060 for DO's managed MySQL
