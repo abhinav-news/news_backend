@@ -1,9 +1,5 @@
 from django.urls import path
-from .views import (
-    CategoryListCreateView, CategoryDetailView,
-    SubCategoryListCreateView, SubCategoryDetailView,
-    ArticleListCreateView, ArticleDetailView, FileUploadView
-)
+from .views import *
 
 urlpatterns = [
     path('categories/', CategoryListCreateView.as_view(), name='category-list'),
@@ -15,4 +11,5 @@ urlpatterns = [
     path('articles/', ArticleListCreateView.as_view(), name='article-list'),
     path('articles/<int:pk>/', ArticleDetailView.as_view(), name='article-detail'),
     path('upload/', FileUploadView.as_view(), name='upload-file'),
+    path('user/', UserAPIView.as_view(), name='create_user'),
 ]

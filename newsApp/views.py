@@ -1,20 +1,16 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Category, SubCategory, Article
-from .serializers import CategorySerializer, SubCategorySerializer, ArticleSerializer, FileUploadSerializer
+from .permissions import IsAdminOrReadOnly
+from django.db import transaction
+from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.files.storage import default_storage
 from django.conf import settings
 import os
 import boto3
 import uuid
 
-# Permissions
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
-            return True
-        return request.user and request.user.is_staff
 
 # CATEGORY VIEWS
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -111,4 +107,51 @@ class FileUploadView(APIView):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
                 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserAPIView(APIView):
+    def get_permissions(self):
+        # POST is public, PATCH requires authentication
+        if self.request.method == "POST":
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    def post(self, request):
+        serializer = UserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                with transaction.atomic():
+                    user = serializer.save()
+            except Exception as e:
+                return Response(
+                    {"error": f"User creation failed: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response({
+                "message": "User created successfully",
+                "user_id": user.id,
+                "email": user.email
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        # Partial update of logged-in user
+        user = request.user
+        serializer = UserCreateSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            try:
+                with transaction.atomic():
+                    user = serializer.save()
+            except Exception as e:
+                return Response(
+                    {"error": f"User update failed: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response({
+                "message": "User updated successfully"
+            }, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
