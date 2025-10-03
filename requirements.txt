@@ -12,3 +12,4 @@ python-decouple==3.8
 sqlparse==0.5.3
 boto3==1.34.65
 django-storages==1.14.2
+whitenoise
