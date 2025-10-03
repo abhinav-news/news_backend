@@ -110,25 +110,25 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 WSGI_APPLICATION = 'news_channel.wsgi.application'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',  # shows SQL and connection activity
-            'handlers': ['console'],
-        },
-        'django.request': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',  # shows SQL and connection activity
+#             'handlers': ['console'],
+#         },
+#         'django.request': {
+#             'level': 'DEBUG',
+#             'handlers': ['console'],
+#         },
+#     },
+# }
 
 
 
@@ -151,11 +151,11 @@ DATABASES = {
     }
 }
 
-import logging
+# import logging
 
 # Log database connection config (do not log password)
-db_logger = logging.getLogger('django.db.backends')
-db_logger.setLevel(logging.DEBUG)
+# db_logger = logging.getLogger('django.db.backends')
+# db_logger.setLevel(logging.DEBUG)
 
 
 
