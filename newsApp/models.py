@@ -40,7 +40,7 @@ class Article(models.Model):
     subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
     content = models.TextField(null=True, blank=True)
-    banner_image = models.ImageField(null=True, blank=True)
+    banner_image = models.CharField(max_length=600, null=True, blank=True)
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
