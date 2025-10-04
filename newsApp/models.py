@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug and self.name:
@@ -19,7 +19,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug and self.name:
@@ -34,8 +34,8 @@ class SubCategory(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255, unique=True, null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, null=True, max_length=255)
+    author = models.CharField(max_length=100, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
     summary = models.TextField(null=True, blank=True)

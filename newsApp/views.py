@@ -28,6 +28,15 @@ class SubCategoryListCreateView(generics.ListCreateAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
     permission_classes = [IsAdminOrReadOnly]
+    
+
+class SubCategoriesByCategoryView(generics.ListAPIView):
+    serializer_class = SubCategorySerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        return SubCategory.objects.filter(category_id=category_id)
 
 class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubCategory.objects.all()
