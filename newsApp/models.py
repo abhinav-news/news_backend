@@ -33,6 +33,15 @@ class SubCategory(models.Model):
 
 
 class Article(models.Model):
+
+    class TagChoices(models.TextChoices):
+        BREAKING_NEWS = 'breaking_news', 'Breaking News'
+        TRENDING_NOW = 'trending_now', 'Trending Now'
+        FEATURED = 'featured', 'Featured'
+        EXCLUSIVE = 'exclusive', 'Exclusive'
+        ADVERTISEMENT = 'advertisement', 'Advertisement'
+        HAPPENING_NOW = 'happening_now', 'Happening Now'
+
     title = models.CharField(max_length=255, unique=True, null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True, max_length=255)
     author = models.CharField(max_length=100, null=True, blank=True)
@@ -45,7 +54,7 @@ class Article(models.Model):
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tag = models.CharField(max_length=100, null=True, blank=True)
+    tag = models.CharField(max_length=100, choices=TagChoices.choices, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
