@@ -33,7 +33,7 @@ class SubCategory(models.Model):
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField(max_length=255, unique=True, null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
