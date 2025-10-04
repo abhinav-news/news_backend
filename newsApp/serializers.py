@@ -17,6 +17,8 @@ class SubCategorySerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name', read_only=True)
+    subcategory_name = serializers.CharField(source='subcategory.name', read_only=True)
     title = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=Article.objects.all())]
@@ -24,7 +26,14 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = '__all__'
+        fields = [
+            'id', 'title', 'slug', 'author',
+            'category', 'category_name',
+            'subcategory', 'subcategory_name',
+            'summary', 'content', 'banner_image',
+            'is_published', 'published_at', 'tag',
+            'created_at', 'updated_at'
+        ]
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField()
