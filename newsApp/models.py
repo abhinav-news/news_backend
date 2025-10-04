@@ -1,9 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from uuid import uuid4
 
 
-class Category(models.Model):
+class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
@@ -16,7 +25,7 @@ class Category(models.Model):
         return self.name or "Unnamed Category"
 
 
-class SubCategory(models.Model):
+class SubCategory(BaseModel):
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True, null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
@@ -32,7 +41,7 @@ class SubCategory(models.Model):
         return self.name or "Unnamed Subcategory"
 
 
-class Article(models.Model):
+class Article(BaseModel):
 
     class TagChoices(models.TextChoices):
         BREAKING_NEWS = 'breaking_news', 'Breaking News'
@@ -52,8 +61,6 @@ class Article(models.Model):
     banner_image = models.CharField(max_length=600, null=True, blank=True)
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     tag = models.CharField(max_length=100, choices=TagChoices.choices, null=True, blank=True)
 
     def save(self, *args, **kwargs):
