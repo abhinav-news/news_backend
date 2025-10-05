@@ -29,12 +29,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'id', 'title', 'slug', 'author',
-            'category', 'category_name',
-            'subcategory', 'subcategory_name',
-            'summary', 'content', 'banner_image',
-            'is_published', 'published_at', 'tag',
-            'created_at', 'updated_at'
+            'id', 'title', 'slug', 'author', 'category', 'category_name', 'related_keywords',
+            'subcategory', 'subcategory_name', 'summary', 'content', 'banner_image',
+            'is_published', 'published_at', 'tag', 'created_at', 'updated_at'
         ]
 
 class FileUploadSerializer(serializers.Serializer):

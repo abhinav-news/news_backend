@@ -61,7 +61,8 @@ class Article(BaseModel):
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(null=True, blank=True)
     tag = models.CharField(max_length=100, choices=TagChoices.choices, null=True, blank=True)
-
+    related_keywords = models.CharField(max_length=255, null=True, blank=True)
+    
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
             self.slug = slugify(self.title)
