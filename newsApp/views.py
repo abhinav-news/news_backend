@@ -61,12 +61,35 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['category', 'subcategory', 'is_published', 'tag' , 'related_keywords']
+     filterset_fields = ['category', 'subcategory', 'is_published', 'tag']
     search_fields = ['title', 'summary']
     ordering_fields = ['updated_at', 'created_at', 'title']
     ordering = ['-updated_at']
     pagination_class = StandardResultsSetPagination
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        related_kw = self.request.query_params.get('related_keywords')
+        if related_kw:
+            queryset = queryset.filter(related_keywords__icontains=related_kw)
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        published_count = queryset.filter(is_published=True).count()
+        draft_count = queryset.filter(is_published=False).count()
+
+        return self.get_paginated_response({
+            "counts": {
+                "published": published_count,
+                "draft": draft_count,
+            },
+            "results": serializer.data
+        })
 
 class ArticleDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
