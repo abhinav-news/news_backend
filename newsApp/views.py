@@ -3,7 +3,7 @@ import boto3
 import uuid
 from rest_framework import generics, status, filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Category, SubCategory, Article
+from .models import Category, Article
 from .permissions import IsAdminOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
@@ -29,31 +29,6 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadOnly]
 
-# SUBCATEGORY VIEWS
-class SubCategoryListCreateView(generics.ListCreateAPIView):
-    queryset = SubCategory.objects.all().order_by('-updated_at')
-    serializer_class = SubCategorySerializer
-    permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['updated_at', 'created_at', 'name']
-    ordering = ['-updated_at']
-
-    
-class SubCategoriesByCategoryView(generics.ListAPIView):
-    serializer_class = SubCategorySerializer
-    permission_classes = [AllowAny]
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['updated_at', 'created_at', 'name']
-    ordering = ['-updated_at']
-
-    def get_queryset(self):
-        category_id = self.kwargs['category_id']
-        return SubCategory.objects.filter(category_id=category_id)
-
-class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SubCategory.objects.all()
-    serializer_class = SubCategorySerializer
-    permission_classes = [IsAdminOrReadOnly]
 
 # ARTICLE VIEWS
 class ArticleListCreateView(generics.ListCreateAPIView):
@@ -61,7 +36,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['category', 'subcategory', 'is_published', 'tag']
+    filterset_fields = ['category', 'is_published', 'tag']
     search_fields = ['title', 'summary']
     ordering_fields = ['updated_at', 'created_at', 'title']
     ordering = ['-updated_at']
@@ -102,18 +77,6 @@ class ArticlesByCategoryView(generics.ListAPIView):
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         return Article.objects.filter(category_id=category_id).order_by('-updated_at')
-
-
-# ARTICLES BY SUBCATEGORY
-class ArticlesBySubCategoryView(generics.ListAPIView):
-    serializer_class = ArticleSerializer
-    permission_classes = [AllowAny]
-    pagination_class = StandardResultsSetPagination
-
-    def get_queryset(self):
-        subcategory_id = self.kwargs['subcategory_id']
-        return Article.objects.filter(subcategory_id=subcategory_id).order_by('-updated_at')
-
 
 
 class FileUploadView(APIView):
