@@ -24,22 +24,6 @@ class Category(BaseModel):
         return self.name or "Unnamed Category"
 
 
-class SubCategory(BaseModel):
-    category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug and self.name:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        if self.name and self.category:
-            return f"{self.category.name} - {self.name}"
-        return self.name or "Unnamed Subcategory"
-
-
 class Article(BaseModel):
 
     class TagChoices(models.TextChoices):
@@ -54,7 +38,6 @@ class Article(BaseModel):
     slug = models.SlugField(unique=True, blank=True, null=True, max_length=255)
     author = models.CharField(max_length=100, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     banner_image = models.CharField(max_length=600, null=True, blank=True)

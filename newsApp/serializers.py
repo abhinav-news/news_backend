@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Category, SubCategory, Article
+from .models import Category, Article
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
@@ -10,17 +10,9 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
-class SubCategorySerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
-
-    class Meta:
-        model = SubCategory
-        fields = ['id', 'category', 'category_name', 'name', 'slug', 'created_at', 'updated_at']
-
 
 class ArticleSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
-    subcategory_name = serializers.CharField(source='subcategory.name', read_only=True)
     title = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=Article.objects.all())]
@@ -29,8 +21,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'id', 'title', 'slug', 'author', 'category', 'category_name', 'related_keywords',
-            'subcategory', 'subcategory_name', 'summary', 'content', 'banner_image',
+            'id', 'title', 'slug', 'author', 'category', 'category_name', 'related_keywords', 'summary', 'content', 'banner_image',
             'is_published', 'published_at', 'tag', 'created_at', 'updated_at'
         ]
 
