@@ -76,20 +76,16 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)
 
-        published_count = queryset.filter(is_published=True).count()
-        draft_count = queryset.filter(is_published=False).count()
+        counts = {
+            'published': queryset.filter(is_published=True).count(),
+            'draft': queryset.filter(is_published=False).count(),
+        }
 
-        return self.get_paginated_response({
-            "counts": {
-                "published": published_count,
-                "draft": draft_count,
-            },
-            "results": serializer.data
-        })
+        # Pass counts to pagination response
+        return self.paginator.get_paginated_response(serializer.data, counts=counts)
 
 class ArticleDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
