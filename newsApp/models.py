@@ -16,8 +16,10 @@ class Category(BaseModel):
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug and self.name:
-            self.slug = slugify(self.name)
+        if self.name:
+            new_slug = slugify(self.name)
+            if not self.slug or self.slug != new_slug:
+                self.slug = new_slug
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -47,8 +49,10 @@ class Article(BaseModel):
     related_keywords = models.JSONField(default=list, blank=True, null=True)
     
     def save(self, *args, **kwargs):
-        if not self.slug and self.title:
-            self.slug = slugify(self.title)
+        if self.title:
+            new_slug = slugify(self.title)
+            if not self.slug or self.slug != new_slug:
+                self.slug = new_slug
         if self.is_published and not self.published_at:
             from django.utils.timezone import now
             self.published_at = now()

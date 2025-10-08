@@ -36,8 +36,8 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['category', 'is_published', 'tag']
-    search_fields = ['title', 'summary']
+    filterset_fields = ['category', 'is_published', 'tag' , 'slug']
+    search_fields = ['title', 'summary', 'slug']
     ordering_fields = ['updated_at', 'created_at', 'title']
     ordering = ['-updated_at']
     pagination_class = StandardResultsSetPagination
