@@ -43,6 +43,8 @@ class Article(BaseModel):
     summary = models.TextField(null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     banner_image = models.CharField(max_length=600, null=True, blank=True)
+    secondary_banner_image = models.CharField(max_length=600, null=True, blank=True)
+    secondary_content = models.TextField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(null=True, blank=True)
     tag = models.CharField(max_length=100, choices=TagChoices.choices, null=True, blank=True)
