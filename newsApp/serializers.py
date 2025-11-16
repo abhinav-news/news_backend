@@ -22,7 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = [
             'id', 'title', 'slug', 'author', 'category', 'category_name', 'related_keywords', 'summary', 'content', 'banner_image',
-            'is_published', 'published_at', 'tag', 'created_at', 'updated_at'
+            'secondary_banner_image', 'secondary_content', 'is_published', 'published_at', 'tag', 'created_at', 'updated_at'
         ]
 
 class FileUploadSerializer(serializers.Serializer):
