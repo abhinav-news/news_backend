@@ -77,10 +77,39 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    "EXCEPTION_HANDLER": "newsApp.exception_handler.custom_exception_handler"
 }
 
 from datetime import timedelta
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": (
+                "[{levelname}] {asctime} {name} "
+                "view={view} method={method} path={path} "
+                "status={status_code} msg={message}"
+            ),
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "app": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
 
 SIMPLE_JWT = {
     # Access token valid for 1 day
